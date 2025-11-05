@@ -8,6 +8,7 @@ import { KeyboardAvoidingView } from "react-native-keyboard-controller";
 import {
   Animated,
   Keyboard,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -23,9 +24,13 @@ export default function LoginScreen() {
   const [activeTab, setActiveTab] = useState<"login" | "register">("login");
   const [loginUser, setLoginUser] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
+
   const [registerName, setRegisterName] = useState("");
+  const [registerFirstname, setRegisterFirstname] = useState("");
+  const [registerLastname, setRegisterLastname] = useState("");
   const [registerEmail, setRegisterEmail] = useState("");
   const [registerPassword, setRegisterPassword] = useState("");
+  const [registerID, setRegisterID] = useState("");
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [hasError, setHasError] = useState(false);
@@ -93,8 +98,11 @@ export default function LoginScreen() {
     setHasError(false);
 
     const userData: UserData = {
+      id: Number(registerID),
       email: registerEmail,
       username: registerName.trim(),
+      firstname: registerFirstname.trim(),
+      lastname: registerLastname.trim(),
     };
 
     try {
@@ -232,7 +240,22 @@ export default function LoginScreen() {
 
               {/* Register Form */}
               {activeTab === "register" && (
-                <View style={styles.form}>
+                <ScrollView
+                  style={styles.scrollForm}
+                  contentContainerStyle={styles.form}
+                  showsVerticalScrollIndicator={false}
+                  keyboardShouldPersistTaps="handled"
+                >
+                  <View style={styles.inputGroup}>
+                    <Text style={styles.label}>Clave ULSA</Text>
+                    <TextInput
+                      style={styles.input}
+                      placeholder="Sin 'al'..."
+                      placeholderTextColor="rgba(255,255,255,0.5)"
+                      value={registerID}
+                      onChangeText={setRegisterID}
+                    />
+                  </View>
                   <View style={styles.inputGroup}>
                     <Text style={styles.label}>Nombre de Usuario</Text>
                     <TextInput
@@ -241,6 +264,26 @@ export default function LoginScreen() {
                       placeholderTextColor="rgba(255,255,255,0.5)"
                       value={registerName}
                       onChangeText={setRegisterName}
+                    />
+                  </View>
+                  <View style={styles.inputGroup}>
+                    <Text style={styles.label}>Nombre</Text>
+                    <TextInput
+                      style={styles.input}
+                      placeholder="¿Cómo te llamas?"
+                      placeholderTextColor="rgba(255,255,255,0.5)"
+                      value={registerFirstname}
+                      onChangeText={setRegisterFirstname}
+                    />
+                  </View>
+                  <View style={styles.inputGroup}>
+                    <Text style={styles.label}>Apellido</Text>
+                    <TextInput
+                      style={styles.input}
+                      placeholder="¿Y tu apellido?"
+                      placeholderTextColor="rgba(255,255,255,0.5)"
+                      value={registerLastname}
+                      onChangeText={setRegisterLastname}
                     />
                   </View>
                   <View style={styles.inputGroup}>
@@ -279,7 +322,7 @@ export default function LoginScreen() {
                       No pudimos registrarte, revisa los datos.
                     </Text>
                   ) : undefined}
-                </View>
+                </ScrollView>
               )}
             </BlurView>
           </KeyboardAvoidingView>
@@ -356,6 +399,10 @@ const styles = StyleSheet.create({
   },
   form: {
     gap: 16,
+  },
+  scrollForm: {
+    maxHeight: 340,
+    flexGrow: 0,
   },
   inputGroup: {
     gap: 8,

@@ -75,8 +75,10 @@ export async function register(
   formData.append("username", user.username);
   formData.append("pass", passwordHash);
   formData.append("email", user.email);
-  formData.append("fist_name", user.firstname ?? "");
-  formData.append("last_name", user.lastname ?? "");
+  formData.append("firstname", user.firstname ?? "");
+  formData.append("lastname", user.lastname ?? "");
+
+  console.log(formData);
 
   const response = await postFormData<SignInResponseDto>(
     endpoints.register,
@@ -91,6 +93,8 @@ export async function register(
     id: response.id,
     email: response.email ?? "",
     username: response.username ?? "",
+    firstname: user.firstname,
+    lastname: user.lastname,
   };
 
   return {
